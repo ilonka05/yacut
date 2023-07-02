@@ -8,6 +8,9 @@ from yacut.error_handlers import InvalidAPIUsage
 from yacut.models import URLMap
 from yacut.views import get_unique_short_id
 
+VALID_CHARACTERS = r'^[A-Za-z0-9]+$'
+MAX_LENGTH_CUSTOM_ID = 16
+
 
 @app.route('/api/id/', methods=['POST'])
 def create_short_url():
@@ -23,7 +26,7 @@ def create_short_url():
         data['custom_id'] = get_unique_short_id()
     elif URLMap.query.filter_by(short=data['custom_id']).first():
         raise InvalidAPIUsage(f'Имя "{data["custom_id"]}" уже занято.')
-    elif not match(r'^[A-Za-z0-9]+$', data['custom_id']) or len(data['custom_id']) > 16:
+    elif not match(VALID_CHARACTERS, data['custom_id']) or len(data['custom_id']) > MAX_LENGTH_CUSTOM_ID:
         raise InvalidAPIUsage('Указано недопустимое имя для короткой ссылки')
 
     urlmap = URLMap()

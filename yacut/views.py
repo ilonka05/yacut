@@ -1,21 +1,9 @@
-import random
-import string
-
 from flask import abort, flash, redirect, render_template, url_for
 
 from yacut import app, db
 from yacut.forms import YacutForm
 from yacut.models import URLMap
-
-
-def get_unique_short_id():
-    """Формирование коротких идентификаторов."""
-    while True:
-        short_id = ''.join(
-            random.choices(string.ascii_letters, k=6)
-        )
-        if not URLMap.query.filter_by(short=short_id).first():
-            return short_id
+from yacut.utils import get_unique_short_id
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -44,8 +32,6 @@ def index_view():
 @app.route('/<string:short_id>', methods=['GET'])
 def yacut_redirect(short_id):
     """View-функция, отвечающая за переадресацию."""
-    urlmap = URLMap.query.filter_by(short=short_id).first()
-    if urlmap is not None:
-        original_link = urlmap.original
-        return redirect(original_link)
-    abort(404)
+    urlmap = URLMap.query.filter_by(short=short_id).first_or_404()
+    original_link = urlmap.original
+    return redirect(original_link)

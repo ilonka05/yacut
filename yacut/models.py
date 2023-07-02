@@ -23,5 +23,5 @@ class URLMap(db.Model):
         """Метод-десериализатор для добавления в пустой объект класса значения полей,
         полученных в POST-запросе.
         """
-        setattr(self, 'original', data['url'])
-        setattr(self, 'short', data['custom_id'])
+        self.original = data['url']
+        self.short = data['custom_id']
