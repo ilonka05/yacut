@@ -62,7 +62,6 @@ FLASK_APP=yacut
 FLASK_ENV=development
 DATABASE_URI=sqlite:///db.sqlite3
 SECRET_KEY=YOUR_SECRET_KEY
-
 ```
 
 - Запустите проект локально и перейдите по указанной в терминале ссылке
